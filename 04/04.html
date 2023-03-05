@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../stemp-css/stemp.css" type="text/css">
+    <title>04</title>
+</head>
+<body>
+    <h1>Curso MySQL #04 - Melhorando a Estrutura do Banco de Dados</h1>
+
+    <main>
+        <h1>Como melhorar um banco de dados?</h1>
+        <p>Consideremos o banco de dados anterior. E então, desconsideremos em seguida...</p>
+
+        <pre>
+<code>
+DROP DATABASE <span class="tBranco">bd_cadastro</span>;</code>
+        </pre>
+
+        <p>O comando acima <b>vai apagar a estrutura do banco de dados</b>. É necessário tomar cuidado com a diretiva <span class="tCodigo">DROP</span> em alguns casos, principalmente quando estamos falando sobre apagar coisas, e isso envolve a estrutura das tabelas e seus valores inseridos.</p>
+
+        <p>E então, vamos recriar o mesmo banco só que com algumas melhorias e detalhes.</p>
+
+        <br><br>
+
+        <h1>Unicode Transformation Format</h1>
+        <p>... Ou "<em>Formato de Transformação Unicode</em>" (e especificamente, o UTF-8), é como é conhecido como um <b>tipo de codificação binária de comprimento variável</b> que damos para decodificação de conjuntos de caracteres. Em resumo, quando alguns caracteres fogem do que abrange as letras do alfabeto e começam a possuir símbolos e acentuações, é bem provável <a href="https://pt.wikipedia.org/wiki/Mojibake#:~:text=Mojibake%20(%E6%96%87%E5%AD%97%E5%8C%96%E3%81%91%2C%20moji%20caractere,%22garatuja%22%20em%20portugu%C3%AAs)." target="_blank" rel="external">que elas sejam exibidas de forma errada e consequentemente sejam incompreensíveis</a>. O UTF-8 é esse tipo de codificação que abrange também as letras e símbolos incomuns que fogem do conjunto de letras do alfabeto e fazem com que sejam devidamente consideradas e exibidas.</p>
+
+        <p>E quando tratamos de cadastros de pessoas nomeadas de "José", "Márcia", "Cecília", ou qualquer outra palavra que possua acentuação, é necessário que essas informações <b>se mantenham da mesma forma como foram inseridas</b>.</p>
+
+        <p>De qualquer forma, para evitar esse problemão, vamos considerar essa seguinte trecho na criação do nosso banco de dados e <b>garantir que ele lide com as informações e dados inseridos com base na codificação UTF-8</b>. Esse novo trecho é que chamamos de "<b><em>Constraints</em></b>" em SQL.</p>
+
+        <p>Uma 'constraint' é como chamamos os <b>os comandos que determinam regras dentro do banco de dados e suas estruturas</b>. Observe:</p>
+
+        <pre>
+<code>
+CREATE DATABASE <span class="tBranco">bd_cadastro</span>
+DEFAULT CHARACTER SET <span class="tBranco">utf8</span>
+DEFAULT COLLATE <span class="tBranco">utf8_general_ci</span>;</code>
+        </pre>
+
+        <p class="alerta">Importante! Observe que o ponto-e-vírgula no SQL <b>determina o fim de uma linha inteira de comando</b>, independentemente se há quebras de linhas ou não.</p>
+
+        <p>A 'constraint' <span class="tCodigo">DEFAULT</span> nesse contexto define <b>uma configuração padrão para o código de codificação de caracteres do nosso banco de dados</b>, mas em outros contextos, como em campos de tabelas, podemos utilizá-lo <b>para definir um valor padrão, mas não definitivo</b> como valor de campo de tabela se este valor não for informado.</p>
+
+        <p>No mais, vamos para a prática!</p>
+
+        <br><br>
+
+        <h1>Estruturando a tabela...</h1>
+        <p>Vamos considerar agora o cadastro de pessoas. Nesse banco de dados de cadastro, uma pessoa, no contexto de tabela, terá os seguintes campos: <b>nome</b>, <b>dtNascimento</b>, <b>sexo</b>, <b>peso</b>, <b>altura</b> e <b>nacionalidade</b>.</p>
+
+        <p>Com o pouco que sabemos sobre as constraints e tipos primitivos em SQL, vamos conhecer novos tipos e melhorar <b>a estrutura do nosso banco de dados</b>. Observe:</p>
+
+        <pre>
+<code>
+CREATE DATABASE <span class="tBranco">bd_cadastro</span>
+DEFAULT CHARACTER SET <span class="tBranco">utf8</span>
+DEFAULT COLLATE <span class="tBranco">utf8_general_ci</span>;
+
+CREATE TABLE <span class="tBranco">pessoa</span>(
+    <span class="tBranco">nome</span> VARCHAR(<span class="tLaranja">150</span>) NOT NULL,
+    <span class="tBranco">dtNascimento</span> DATE,
+    <span class="tBranco">sexo</span> ENUM (<span class="tLaranja">'M'</span>, <span class="tLaranja">'F'</span>),
+    <span class="tBranco">peso</span> DECIMAL (<span class="tLaranja">5</span>,<span class="tLaranja">2</span>),
+    <span class="tBranco">altura</span> DECIMAL (<span class="tLaranja">3</span>,<span class="tLaranja">2</span>),
+    <span class="tBranco">nacionalidade</span> VARCHAR(<span class="tLaranja">50</span>) DEFAULT <span class="tLaranja">"Brasil"</span>
+) DEFAULT CHARSET = <span class="tBranco">utf8</span>;</code>
+        </pre>
+
+        <p class="alerta">Perceba que <b>podemos especificar o tipo de codificação de caracteres para a tabela criada também</b>!</p>
+
+        <p>Nessa estrutura, temos novas 'constraints' utilizadas agora <b>para determinar regras de cada campo dentro da tabela</b>. <span class="tCodigo">NOT NULL</span> determina que <b>o campo não pode estar vazio</b>. Essa constraint estará presente <b>em um outro conceito importante quando se trata de bancos de dados relacionais</b>.</p>
+
+        <p>E então, temos <b>outros tipos primitivos interessantes</b> que podem ajudar muito na construção de um banco de dados em SQL otimizado. Observe:</p>
+
+        <table>
+            <thead>
+                <th>Tipo</th>
+                <th>Descrição</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>ENUM</td>
+                    <td>Campos do tipo ENUM <b>estão determinados a receberem apenas um conjunto restrito de valores previamente definido em sua estrutura</b>.</td>
+                </tr>
+                <tr>
+                    <td>DECIMAL</td>
+                    <td>Campos deste tipo recebem valores decimais específicos. Essa 'especificidade' se dá na definição <b>do número de algarismos</b> seguido pelo número de casas decimais.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Para entender melhor o campo de tipo DECIMAL, o <span class="tCodigo"><span class="tBranco">peso</span></span> deve ser composto por <b>um valor de cinco algarismos</b>. Esse valor decimal possui <b>duas casas decimais</b>. A mesma lógica se aplica ao campo <span class="tCodigo"><span class="tBranco">altura</span></span>, que é um valor de três digitos com duas casas decimais.</p>
+
+        <p><span class="tCodigo"><span class="tBranco">peso</span></span> só pode receber valores como '73.45' ou '432.43', bem como <span class="tCodigo"><span class="tBranco">altura</span></span> apenas valores como '1.70', '1.65', etc.</p>
+
+        <p>Observe como <b>determinar regras dentro das estruturas de tabelas podem impactar positivamente na otimização de um banco de dados em questão de otimização</b>, como mencionado mais cedo.</p>
+
+        <br><br>
+
+        <h1>Chave Primária</h1>
+        <p>Como mencionado antes que a constraint <span class="tCodigo">NOT NULL</span> estaria presente em mais um conceito importante de banco de dados, eis o momento. Chaves primárias são uma definição especial <b>em um campo de tabela em que seu valor é único para cada registro</b>. Sabemos que os registros, ou tuplas num linguajar mais técnico, diz respeito <b>ao conjunto de informações individuais registradas no nosso banco de dados</b>. Sabemos que cada registro no nosso banco de dados de cadastro de pessoas é diferente um do outro, pois são registros de "pessoas" individuais que compartilham dos mesmos dados. Imagina se no nosso banco de dados não houvesse nada que pudesse lidar <b>com redundância de cadastros</b>, em que um mesmo registro pode ser feito várias vezes?</p>
+
+        <p>Para evitar isso, transformamos um campo existente ou adicionamos um novo na tabela em que <b>seu valor é único para cada registro</b>. Vamos tomar como exemplo um novo campo chamado 'idPessoa' que se refere justamente a <b>um valor numérico único para cada registro</b>. Com isso, conheceremos também outras propriedades e usos de constraints vistas mais cedo que <b>identificam um campo de chave primária</b>. Observe:</p>
+
+        <pre>
+<code>
+CREATE TABLE <span class="tBranco">pessoa</span>(
+    <span class="tBranco">idPessoa</span> INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    ...</code>
+        </pre>
+
+        <p>O campo e chave primária <span class="tCodigo"><span class="tBranco">idPessoa</span></span> é campo do tipo inteiro. O <span class="tCodigo">NOT NULL</span> como sabemos,  define que o campo não deve estar vazio. E então temos a constraint <span class="tCodigo">AUTO_INCREMENT</span>, que determina que o campo vai incrementar seu valor à cada registro feito. Por fim, temos <span class="tCodigo">PRIMARY KEY</span> que é o que identifica um campo de chave primária em uma tabela.</p>
+
+        <footer>
+            <a href="../03/03.html">Página Anterior</a>
+            <a href="#">Próxima Página</a>
+        </footer>
+    </main>
+</body>
+</html>

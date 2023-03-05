@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../stemp-css/stemp.css" type="text/css">
+    <title>03</title>
+</head>
+<body>
+    <h1>Curso MySQL #03 - Criando o Primeiro Banco de Dados</h1>
+
+    <main>
+        <h1>O modelo relacional</h1>
+        <p>A sigla de SQL para "<em>Structured Query Language</em>", ou <b>Linguagem de Consulta Estruturada</b>, não carrega o nome atoa. Quando falamos em "bancos de dados estruturados", falamos em bancos de dados <b>que funciona à partir de modelos relacionais de dados</b>.</p>
+        
+        <p>o <a href="https://pt.wikipedia.org/wiki/Modelo_relacional" target="_blank" rel="external">modelo relacional</a> e todos os elementos de modelagem de dados que conhecemos quando estudamos banco de dados estruturais, diz que um banco de dados relacional <b>é constituído de tabelas que descrevem características em comum e que se relacionam com outras tabelas</b>.</p>
+        
+        <p>Em um exemplo prático, uma tabela no banco de dados referente ao cliente pode existir dentro deste contexto. E dentro da tabela de cliente podemos ter uma quantidade x de características que ajudam a identificar cada registro dentro desta tabela. Essas características podem incluir: o nome do cliente, a data de nascimento do cliente, o RG do cliente, etc. Um cliente pode se relacionar com outra tabela nomeada "Compra", que tem como características data da compra e hora da compra, por exemplo.</p>
+
+        <p>Note que este exemplo pode ser traduzido para o ambiente de banco justamente por fazermos essa abstração com o mundo real. Clientes podem realizar compras, assim como se faz fisicamente, e no modelo de banco de dados relacional, <b>essa interação entre cliente e compra é chamada de relacionamento</b>. Esse é o esquema de funcionamento de todo banco de dados baseado no modelo relacional.</p>
+
+        <br><br>
+
+        <h1>E como criar um banco de dados?</h1>
+        <p>"Com o comando <span class="tCodigo">CREATE DATABASE</span>" é a resposta!</p>
+
+        <p>Mas antes de qualquer coisa, é necessário entender algumas outras coisas. Entre elas, as "Queries". Uma "Query", no contexto do banco de dados dentro do Workbench, é onde está o "código-fonte" do nosso banco de dados com SQL. Uma Query pode ser totalmente executada como um código normal, bem como pode ser executada linha-a-linha, individualmente. Cada execução, total ou em apenas trechos de código, é a execução de uma Query que vai retornar um valor especificado.</p>
+
+        <p>Isso significa que não necessariamente precisamos executar o mesmo trecho onde criamos o banco de dados para retornar valores de registro de uma tabela; podemos simplesmente executar a parte de comando em que se retorna o valor.</p>
+
+        <p>Dito isso, criemos o nosso banco de dados. Os comandos <span class="tCodigo">CREATE DATABASE</span> é seguido pelo nome do banco de dados em si. Vamos criar um banco de dados de cadastro desta forma.</p>
+
+        <pre>
+<code>
+CREATE DATABASE <span class="tBranco">bd_cadastro</span>;
+USE <span class="tBranco">bd_cadastro</span>;</code>
+        </pre>
+
+        <p>O comando <span class="tCodigo">USE</span> determina que todos os comandos de estruturação e manipulação do banco de dados serão feitos no banco de dados em questão. É necessário certificar se esta linha de comando foi devidamente executada.</p>
+
+        <p>Executando a linha de comando, o banco de dados com nome 'bd_cadastro' será criado. A partir daqui, será possível criar tabelas, definir suas características e criar os primeiros registros. Mas antes disso, vamos conhecer...</p>
+
+        <br><br>
+
+        <h1>Os Tipos Primitivos em SQL</h1>
+        <p>Tipos primitivos é um conceito primário e basico principalmente quando estamos falando de linguagens de programação, neste caso ainda mais quando <b>falamos sobre bancos de dados</b> e as informações a serem manipuladas dentro e fora dele.</p>
+
+        <p>No SQL, os dados primitivos com qual estamos acostumados se organizam e dividem-se entre famílias de tipos primitivos e suas subdivisões. Os quatro principais tipos primitivos do SQL são: <b>Numéricos</b>, <b>Literais</b>, <b>Data/Tempo</b> e os <b>Espaciais</b>. Os numéricos possuem os tipos de dados <b>inteiro</b>, <b>real</b> e <b>lógico</b>, que se subdividem em outros tipos primitivos, por exemplo.</p>
+
+        <p>Isso por quê bancos de dados SQL seguem pela linha de serem bastante precisos quando se trata da estruturização das tabelas e os dados a serem armazenados, levando em consideração a flexibilidade, consistência e robustez de um banco de dados. <b>O comprimento de uma informação em bytes de qualquer tipo de dado dentro de um banco de dados pode ou não comprometer essas questões mencionadas levando em conta seu funcionamento</b>, isso significa que temos vários tipos de valores do tipo 'Inteiro' dentro do SQL, entre eles o <b>TINYINT</b>, que especifica um valor de 3 algarismos entre 0 e 255, o <b>SMALLINT</b> entre os valores -32,768 e 32,767 e o INT, que vai do valor -2,147,483,648 a 2,147,483,647, e etc. etc. etc.</p>
+
+        <p>O grande ponto nisso tudo é <b>a declaração correta para o tipo de informação proposta</b>. Um valor inteiro TINYINT é mais do que o suficiente para especificar campos como 'idade' por exemplo. Isso se extende para tipos não numéricos onde o número de bytes é evidenciado.</p>
+
+        <p>A tabela com essas especificações em cada tipo pode ser encontrada <a href="https://www.digitalocean.com/community/tutorials/sql-data-types" target="_blank" rel="external">aqui</a>.</p>
+
+        <p>Dito isso, vamos conhecer os tipos de dados mais comumente utilizados dentro da estruturação dos campos de uma tabela em um banco de dados.</p>
+
+        <table>
+            <thead>
+                <th>Tipo</th>
+                <th>Descrição</th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>VARCHAR</td>
+                    <td>Tipo primitivo que recebe um valor variável de caracteres. Esse valor variável é definido entre parênteses.</td>
+                </tr>
+                <tr>
+                    <td>CHAR</td>
+                    <td>Tipo primitivo que define um valor fixo de caracteres. Esse valor é definido entre parênteses.</td>
+                </tr>
+                <tr>
+                    <td>INT</td>
+                    <td>Tipo primitivo que define valores numéricos inteiros.</td>
+                </tr>
+                <tr>
+                    <td>DECIMAL</td>
+                    <td>Tipo primitivo que define valores numéricos com vírgula.</td>
+                </tr>
+                <tr>
+                    <td>DATE</td>
+                    <td>Tipo primitivo que especifica datas compostas pelo padrão AAAA-MM-DD.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>... Entre vários outros tipos e seus subtipos.</p>
+
+        <br>
+
+        <p class="alerta">Importante: VARCHAR determina que os valores abaixo ou igual ao que foi determinado em número de caracteres serão desconsiderados. Ao contrário de CHAR, onde o comprimento determinado deve ser satisfeito em sua totalidade. Exemplo: nomes são informações de comprimentos variáveis, ao mesmo tempo em que CPFs, por serem de comprimento igual a 11 caracteres são informações de comprimento fixo.</p>
+
+        <br><br>
+
+        <h1>Criando uma tabela</h1>
+        <p>Dito tudo isso, vamos definir a tabela "cliente", dentro do nosso banco de dados recém-criado.</p>
+
+        <p>À partir do mesmo comando que utilizamos para criar o banco de dados, vamos utilizar para criar uma tabela. Ou neste caso, uma <span class="tCodigo">TABLE</span>.</p>
+
+        <pre>
+<code>
+CREATE DATABASE <span class="tBranco">bd_cadastro</span>;
+USE <span class="tBranco">bd_cadastro</span>;
+
+<span class="tCinza">/*Criando uma tabela 'cliente' e seus campos.*/</span>
+CREATE TABLE <span class="tBranco">cliente</span>(
+    <span class="tBranco">nome</span> VARCHAR(<span class="tLaranja">100</span>),
+    <span class="tBranco">idade</span> TINYINT,
+    <span class="tBranco">email</span> VARCHAR(<span class="tLaranja">200</span>),
+    <span class="tBranco">cpf</span> CHAR(<span class="tLaranja">11</span>)</code>
+);
+        </pre>
+
+        <p>A estrutura da tabela 'cliente' e qualquer outra no modelo relacional baseada em SQL é esta: você tem as diretivas de criação de uma tabela seguido pelo seu identificador. Dentro de parênteses, você tem os campos necessários <b>que todo registro de cliente precisa ter armazenado dentro do banco</b>. Cada campo/característica da tabela é identificado pelo seu nome + o tipo primitivo do dado a ser registrado: <span class="tCodigo"><span class="tBranco">nome</span></span> é do tipo VARCHAR de tamanho máximo de 100. Já <span class="tCodigo"><span class="tBranco">cpf</span></span>, por ser de comprimento fixo, recebe um char tamanho 11, etc.</p>
+
+        <p>Uma vez que a estrutura foi criada, experimente o comando abaixo:</p>
+
+        <pre>
+<code>
+...
+
+DESCRIBE <span class="tBranco">cliente</span>;</code>
+        </pre>
+
+        <p>Este comando vai abrir uma janela com todas as informações da estrutura detalhadamente. Nesta janela você consegue visualizar todos os campos e seus identificadores, tipos e suas propriedades.</p>
+
+        <footer>
+            <a href="../02a/02a.html">Página Anterior</a>
+            <a href="../04/04.html">Próxima Página</a>
+        </footer>
+    </main>
+</body>
+</html>
