@@ -21,14 +21,14 @@ DROP DATABASE <span class="tBranco">bd_cadastro</span>;</code>
 
         <p>O comando acima <b>vai apagar a estrutura do banco de dados</b>. É necessário tomar cuidado com a diretiva <span class="tCodigo">DROP</span> em alguns casos, principalmente quando estamos falando sobre apagar coisas, e isso envolve a estrutura das tabelas e seus valores inseridos.</p>
 
-        <p>E então, vamos recriar o mesmo banco só que com algumas melhorias e detalhes.</p>
+        <p>E então, vamos recriar o mesmo banco só que com algumas melhorias e detalhes novos.</p>
 
         <br><br>
 
         <h1>Unicode Transformation Format</h1>
         <p>... Ou "<em>Formato de Transformação Unicode</em>" (e especificamente, o UTF-8), é como é conhecido como um <b>tipo de codificação binária de comprimento variável</b> que damos para decodificação de conjuntos de caracteres. Em resumo, quando alguns caracteres fogem do que abrange as letras do alfabeto e começam a possuir símbolos e acentuações, é bem provável <a href="https://pt.wikipedia.org/wiki/Mojibake#:~:text=Mojibake%20(%E6%96%87%E5%AD%97%E5%8C%96%E3%81%91%2C%20moji%20caractere,%22garatuja%22%20em%20portugu%C3%AAs)." target="_blank" rel="external">que elas sejam exibidas de forma errada e consequentemente sejam incompreensíveis</a>. O UTF-8 é esse tipo de codificação que abrange também as letras e símbolos incomuns que fogem do conjunto de letras do alfabeto e fazem com que sejam devidamente consideradas e exibidas.</p>
 
-        <p>E quando tratamos de cadastros de pessoas nomeadas de "José", "Márcia", "Cecília", ou qualquer outra palavra que possua acentuação, é necessário que essas informações <b>se mantenham da mesma forma como foram inseridas</b>.</p>
+        <p>E quando tratamos de cadastros de pessoas nomeadas de "José", "Márcia", "Cecília", ou qualquer outra palavra que possua acentuação ou caracteres diferentes, é necessário que essas informações <b>se mantenham da mesma forma como foram inseridas</b>.</p>
 
         <p>De qualquer forma, para evitar esse problemão, vamos considerar essa seguinte trecho na criação do nosso banco de dados e <b>garantir que ele lide com as informações e dados inseridos com base na codificação UTF-8</b>. Esse novo trecho é que chamamos de "<b><em>Constraints</em></b>" em SQL.</p>
 
@@ -117,7 +117,7 @@ CREATE TABLE <span class="tBranco">pessoa</span>(
 
         <footer>
             <a href="../03/03.html">Página Anterior</a>
-            <a href="#">Próxima Página</a>
+            <a href="../05/05.html">Próxima Página</a>
         </footer>
     </main>
 </body>

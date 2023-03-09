@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../stemp-css/stemp.css" type="text/css">
+    <title>05</title>
+</head>
+<body>
+    <h1>Curso MySQL #05 - Inserindo Dados na Tabela (INSERT INTO)</h1>
+
+    <main>
+        <h1>Como inserir dados em um banco de dados?</h1>
+        <p>Com base na estrutura de banco de dados da página anterior, vamos utilizá-lo para <b>inserir dados</b> finalmente. Isso significa que, como <b>criamos uma estrutura de tabela e seus campos</b> e ainda <b>criamos um campo de chave primária para identificar cada registro</b>, podemos, sem problema, realizar cadastros de vários usuários diferentes e visualizá-los na prática. Essa é a estrutura que temos até agora...</p>
+
+    <pre>
+<code>
+CREATE DATABASE <span class="tBranco">bd_cadastro</span>
+DEFAULT CHARACTER SET <span class="tBranco">utf8</span>
+DEFAULT COLLATE <span class="tBranco">utf8_general_ci</span>;
+
+CREATE TABLE <span class="tBranco">pessoa</span>(
+    <span class="tBranco">idPessoa</span> INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    <span class="tBranco">nome</span> VARCHAR(<span class="tLaranja">150</span>) NOT NULL,
+    <span class="tBranco">dtNascimento</span> DATE,
+    <span class="tBranco">sexo</span> ENUM (<span class="tLaranja">'M'</span>, <span class="tLaranja">'F'</span>),
+    <span class="tBranco">peso</span> DECIMAL (<span class="tLaranja">5</span>,<span class="tLaranja">2</span>),
+    <span class="tBranco">altura</span> DECIMAL (<span class="tLaranja">3</span>,<span class="tLaranja">2</span>),
+    <span class="tBranco">nacionalidade</span> VARCHAR(<span class="tLaranja">50</span>) DEFAULT <span class="tLaranja">"Brasil"</span>
+) DEFAULT CHARSET = <span class="tBranco">utf8</span>;</code>
+    </pre>
+
+        <p>Para inserir dados num banco de dados, utilizamos o comando <span class="tCodigo">INSERT INTO</span>. Observe.</p>
+
+        <pre>
+<code>
+...
+
+INSERT INTO <span class="tBranco">cliente</span> (<span class="tBranco">nome</span>, <span class="tBranco">dtNascimento</span>, <span class="tBranco">sexo</span>, <span class="tBranco">peso</span>, <span class="tBranco">altura</span>, 
+<span class="tBranco">nacionalidade</span>) VALUES (<span class="tLaranja">"Matheus"</span>, <span class="tLaranja">"2003-08-29"</span>, <span class="tLaranja">'M'</span>, <span class="tLaranja">75.8</span>, <span class="tLaranja">1.75</span>, <span class="tLaranja">"Brasil"</span>);</code>
+        </pre>
+
+        <p>Perceba que <b>é necessário informar em qual tabela queremos fazer a inserção de dados</b>. Entre parênteses colocamos <b>os campos presentes na estrutura da tabela que criamos</b> e então, à partir do comando <span class="tCodigo">VALUES</span> colocamos, entre parênteses, respeitando os tipos primitivos estipulados, <b>cada valor presente.</b></p>
+
+        <p>Note que <b>tanto o número de argumentos de campos a receberem o valor</b> quanto <b>o número de argumentos dos valores à serem inseridos</b>, presentes em ambas as aberturas de parênteses, devem ser o mesmo. Caso contrário, a inserção de dados na tabela como um novo registro não aconteceria por erro.</p>
+
+        <p>Uma outra coisa a se notar são <b>alguns campos não informados dentro do comando de INSERT</b>. Isso porquê, diferentemente dos campos de <span class="tCodigo"><span class="tBranco">idPessoa</span></span> e <span class="tCodigo"><span class="tBranco">nacionalidade</span></span>, os demais campos <b>não possuem regras definidas</b>. Isso significa que, para os valores informados acima, estes poderiam ser omitidos e o campo estaria vazio após a inserção, mas sem erros.</p>
+
+        <p>O campo <span class="tCodigo"><span class="tBranco">idPessoa</span></span>, como vimos, possui algumas constraints. Entre elas <span class="tCodigo">NOT NULL</span>, que impede que o valor de campo seja nulo/vazio e <span class="tCodigo">AUTO_INCREMENT</span>, que <b>vai automaticamente incrementar um valor numérico para cada registro dentro do banco</b>. Em um comando INSERT, campos de chaves primárias <b>não são informadas para receberem um valor</b> justamente por serem autossuficientes.</p>
+
+        <p>Já campos com valores pré-definidos por <span class="tCodigo">DEFAULT</span> também podem não serem informados em um comando INSERT <b>justamente por terem um valor padrão caso nenhum argumento for passado</b>. O campo de <span class="tCodigo"><span class="tBranco">nacionalidade</span></span> vai predefinir o valor <span class="tLaranja">"Brasil"</span> se o valor e campo não for informado.</p>
+
+        <p>O último caso aqui é do campo de <span class="tCodigo"><span class="tBranco">nome</span></span>, que não é predefinido em sua estrutura com um valor padrão. Se nenhum argumento e valor desse campo for passado em um INSERT, um erro ocorrerá e o registro não será feito. Isso porquê <b>este é o único campo com a constraint </b><span class="tCodigo">NOT NULL</span>, que impede um valor de campo ser definida como vazio/nulo.</p>
+
+        <p>...</p>
+
+        <p>Uma vez que o comando foi executado, basta <b>visualizar o registro na tabela</b> selecionando-a através de um outro comando. Observe:</p>
+
+        <pre>
+<code>
+...
+
+SELECT * FROM <span class="tBranco">pessoa</span>;</code>  
+        </pre>
+
+        <p>O comando <span class="tCodigo">SELECT</span> é utilizado para retornar registros de um banco de dados baseado em algum critério ou não. <b>O sinal de asterístico é o critério passado aqui e significa para retornar TODOS os registros de uma tabela</b>. Essa tabela é a tabela <span class="tCodigo"><span class="tBranco">pessoa</span></span>, na qual fizemos o registro anteriormente.</p>
+
+        <br><br>
+
+        <h1>Mais alguns toques...</h1>
+        <p>É possível também inserir valores de tabela sem sequer informar os campos de arqgumento, <b>isso significa que, num INSERT, você pode omitir os parênteses que se referem aos campos de estrutura de uma tabela e focar apenas no campo de VALUES</b>.</p>
+
+        <p>Perceba que a diretiva <span class="tCodigo">DEFAULT</span> também pode ser utilizada como valor de campo em um INSERT <b>quando esses campos possuem constraints de definição padrão dentro de sua estrutura</b>, bem como podem ser omitidas durante um INSERT, mostrado anteriormente.</p>
+
+        <p>Outra coisa é a possíbilidade de fazer vários registros em uma tabela em um comando apenas. Observe como fazemos isso reunindo essas outras dicas mencionadas:</p>
+
+        <pre>
+<code>
+...
+
+INSERT INTO <span class="tBranco">cliente</span> VALUES (<span class="tLaranja">"João"</span>, <spclass="tLaranja">"2003-08-29"</span>, <span class="tLaranja">'M'</span>, <span class="tLaranja">75.8</span>, <spclass="tLaranja">1.75</span>, DEFAULT),
+(<span class="tLaranja">"Júlia"</span>, <spclass="tLaranja">"2001-05-14"</span>, <span class="tLaranja">'F'</span>, <span class="tLaranja">65.8</span>, <spclass="tLaranja">1.70</span>, <span class="tLaranja">"EUA"</span>),
+(<span class="tLaranja">"João"</span>, <spclass="tLaranja">"1998-02-28"</span>, <span class="tLaranja">'M'</span>, <span class="tLaranja">103.8</span>, <spclass="tLaranja">1.86</span>, <span class="tLaranja">"Brasil"</span>);</code>
+        </pre>
+
+        <footer>
+            <a href="../03/03.html">Página Anterior</a>
+            <a href="../05/05.html">Próxima Página</a>
+        </footer>
+    </main>
+</body>
+</html>
